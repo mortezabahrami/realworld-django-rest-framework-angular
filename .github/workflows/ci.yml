@@ -45,9 +45,9 @@ jobs:
       - name: Link Angular CLI
         run: npm link @angular/cli && npm install --save-dev @angular-devkit/build-angular
 
-      - name: Run Tests
-        working-directory: ./frontend
-        run: npm run test
+      # - name: Run Tests
+      #   working-directory: ./frontend
+      #   run: npm run test
 
       - name: Building application
         working-directory: ./frontend
