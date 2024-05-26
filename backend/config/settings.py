@@ -28,7 +28,7 @@ SECRET_KEY = (
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['congnition-ai-app-env-1.eba-jsmh4bp2.eu-central-1.elasticbeanstalk.com']
 
@@ -98,10 +98,6 @@ DB_USER = os.environ.get("DB_USER")
 DB_PASSWORD = os.environ.get("DB_PASSWORD")
 DB_HOST = os.environ.get("DB_HOST")
 DB_PORT = os.environ.get("DB_PORT")
-
-print("MAMMAD")
-print(DB_NAME)
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -112,8 +108,6 @@ DATABASES = {
         "PORT": DB_PORT,
     }
 }
-
-print(DATABASES)
 
 
 # Password validation
