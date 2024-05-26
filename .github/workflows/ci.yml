@@ -1,70 +1,77 @@
-name: CI
-
-# Enable Buildkit and let compose use it to speed up image building
-env:
-  DOCKER_BUILDKIT: 1
-  COMPOSE_DOCKER_CLI_BUILD: 1
+name: production
 
 on:
-  pull_request:
-    branches: ['master', 'deploy']
-
   push:
-    branches: ['master', 'deploy']
-
-concurrency:
-  group: ${{ github.head_ref || github.run_id }}
-  cancel-in-progress: true
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
-  linter:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code Repository
-        uses: actions/checkout@v4
+  ci:
+    runs-on: ${{ matrix.os }}
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node: [20]
+    env:
+      NODE_ENV: "production"
+
+
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@master
+
+      - name: Setup node env
+        uses: actions/setup-node@v4
         with:
-          python-version: '3.12'
+          node-version: ${{ matrix.node }}
 
-      - name: Run pre-commit
-        uses: pre-commit/action@v3.0.1
-
-  angular_tests:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./frontend
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Install modules
-      run: yarn
-    - name: Run ESLint
-      run: yarn run eslint . --ext .js,.jsx,.ts,.tsx
-    - name: Run tests
-      run: npm run test
-
-  django_tests:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./backend
-
-    steps:
-      - name: Checkout Code Repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Cache node_modules
+        uses: actions/cache@v2
         with:
-          python-version: '3.11'
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+      - name: Installing NPM
+        run: npm install --force
 
-      - name: Run Django Tests
-        run: python manage.py test
+      - name: Run Tests
+        run: npm run test
+
+      - name: Building application
+        run: npm run build
+
+      - name: Generate deployment package
+        run: zip -r deploy.zip * .[^.]* -x "**node_modules**"
+
+      - name: Get timestamp
+        uses: gerred/actions/current-time@master
+        id: current-time
+
+      - name: Run string replace
+        uses: frabert/replace-string-action@master
+        id: format-time
+        with:
+          pattern: '[:\.]+'
+          string: "${{ steps.current-time.outputs.time }}"
+          replace-with: '-'
+          flags: 'g'
+
+      - name: Beanstalk Deploy for app
+        uses: einaregilsson/beanstalk-deploy@v22
+        with:
+          aws_access_key: ${{secrets.ACCESS_KEY_ID}}
+          aws_secret_key: ${{secrets.SECRET_ACCESS_KEY}}
+          application_name: congnition-ai-app
+          environment_name: Congnition-ai-app-env-1
+          region: eu-central-1
+          version_label: "e-learn-${{ steps.format-time.outputs.replaced }}"
+          deployment_package: deploy.zip
+
+      - name: Deployed!
+        run: echo App deployed to ELB
