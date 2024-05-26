@@ -30,7 +30,7 @@ SECRET_KEY = (
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['congnition-ai-app-env-1.eba-jsmh4bp2.eu-central-1.elasticbeanstalk.com']
 
 # Authentication
 AUTH_USER_MODEL = "users.User"
