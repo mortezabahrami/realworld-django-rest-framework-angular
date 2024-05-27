@@ -37,20 +37,22 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
+      - name: Install Angular CLI
+        run: npm install -g @angular/cli
             
       - name: Installing NPM
         working-directory: ./frontend
         run: npm install --force
 
-      - name: Link Angular CLI
-        run: npm link @angular/cli && npm install @angular-devkit/build-angular --force
+      - name: Install Devkit
+        run: npm install @angular-devkit/build-angular --force
 
-      # - name: Install Karma
-      #   run: npm install karma grunt-karma karma-jasmine karma-coverage karma-chrome-launcher karma-jasmine-html-reporter --force && npm i --save-dev @types/jest @types/node
+      - name: Install Karma
+        run: npm install karma grunt-karma karma-jasmine karma-coverage karma-chrome-launcher karma-jasmine-html-reporter --force && npm i --save-dev @types/jest @types/node
 
-      # - name: Run Tests
-      #   working-directory: ./frontend
-      #   run: npm run test
+      - name: Run Tests
+        working-directory: ./frontend
+        run: npm run test
 
       - name: Building application
         working-directory: ./frontend
