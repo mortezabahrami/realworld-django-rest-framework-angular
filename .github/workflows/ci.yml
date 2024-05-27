@@ -38,15 +38,14 @@ jobs:
       #      ${{ runner.os }}-node-
 
       - name: Install Angular CLI
-        run: npm install -g @angular/cli
+        run: npm install -g @angular/cli && npm install @angular-devkit/build-angular --force
             
       - name: Installing NPM
         working-directory: ./frontend
         run: npm install --force
 
       - name: Install Devkit
-        run: npm install karma karma-chrome-launcher karma-coverage karma-jasmine karma-jasmine-html-reporter --save-dev && npm install @angular-devkit/build-angular --force
-
+        run: npm install karma karma-chrome-launcher karma-coverage karma-jasmine karma-jasmine-html-reporter @types/node --save-dev --force
       #- name: Install Jest
       #  run: npm i --save-dev @types/jest @types/node
 
