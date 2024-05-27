@@ -47,8 +47,8 @@ jobs:
       - name: Install Devkit
         run: npm install @angular-devkit/build-angular --force
 
-      - name: Install Karma
-        run: npm install karma grunt-karma karma-jasmine karma-coverage karma-chrome-launcher karma-jasmine-html-reporter --force && npm i --save-dev @types/jest @types/node
+      - name: Install Jest
+        run: npm i --save-dev @types/jest @types/node
 
       - name: Run Tests
         working-directory: ./frontend
