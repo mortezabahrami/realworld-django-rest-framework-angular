@@ -44,8 +44,8 @@ jobs:
         working-directory: ./frontend
         run: npm install --force
 
-      - name: Install Devkit
-        run: npm install @angular-devkit/build-angular --force
+      #- name: Install Devkit
+      #  run: npm install @angular-devkit/build-angular --force
 
       - name: Install Jest
         run: npm i --save-dev @types/jest @types/node
