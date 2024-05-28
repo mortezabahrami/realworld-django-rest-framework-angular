@@ -47,18 +47,18 @@ jobs:
         run: npm install @angular-devkit/build-angular --force && npm install karma karma-chrome-launcher karma-coverage karma-jasmine karma-jasmine-html-reporter @types/node --force
       
       - name: Install Node Types
-        run: npm i @types/node --save-dev --force && npm link @angular/cli --force
+        run: npm i @types/node --save-dev --force
 
       - name: Run Tests
         working-directory: ./frontend
-        run: export NODE_ENV=test && npm ci --force && npm run test
+        run: npm ci --force && npm run test
 
       - name: Clear Test Cache
         run: npm cache clear --force
 
       - name: Building application
         working-directory: ./frontend
-        run: export NODE_ENV=production && npm run build
+        run: npm run build --force
 
       - name: Generate deployment package
         run: zip -r deploy.zip * .[^.]* -x "**node_modules**"
