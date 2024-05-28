@@ -43,7 +43,7 @@ jobs:
         working-directory: ./frontend
         run: npm install --force
 
-      - name: Install Devkit
+      - name: Install Karma
         run: npm install karma karma-chrome-launcher karma-coverage karma-jasmine karma-jasmine-html-reporter @types/node --force
       
       - name: Install Node Types
