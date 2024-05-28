@@ -28,13 +28,13 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
 
-      - name: Cache node_modules
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      # - name: Cache node_modules
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: ~/.npm
+      #     key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-node-
 
       - name: Install Angular CLI
         run: npm install -g @angular/cli
@@ -44,13 +44,16 @@ jobs:
         run: npm install --force
 
       - name: Install Devkit
-        run: npm install @angular-devkit/build-angular --force && npm install karma karma-chrome-launcher karma-coverage karma-jasmine karma-jasmine-html-reporter @types/node --force
+        run: npm install @angular-devkit/build-angular --force
+        run: npm install karma karma-chrome-launcher karma-coverage karma-jasmine karma-jasmine-html-reporter @types/node --force
       
       - name: Install Node Types
-        run: npm i @types/node --save-dev
+        run: npm i @types/node --save-dev --force
+        run: npm link @angular/cli --force
 
       - name: Run Tests
         working-directory: ./frontend
+        run: npm ci --force
         run: export NODE_ENV=test && npm run test
 
       - name: Building application
