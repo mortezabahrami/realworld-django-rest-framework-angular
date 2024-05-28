@@ -53,6 +53,9 @@ jobs:
         working-directory: ./frontend
         run: export NODE_ENV=test && npm ci --force && npm run test
 
+      - name: Clear Test Cache
+        run: npm cache clear --force
+
       - name: Building application
         working-directory: ./frontend
         run: export NODE_ENV=production && npm run build
