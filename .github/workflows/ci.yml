@@ -54,7 +54,7 @@ jobs:
         run: export NODE_ENV=test && npm ci --force && npm run test
 
       - name: Clear Test Cache
-        run: npm cache clear --force
+        run: npm cache clear --force && npm cache verify
 
       - name: Building application
         working-directory: ./frontend
