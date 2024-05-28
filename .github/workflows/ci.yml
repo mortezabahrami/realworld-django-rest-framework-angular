@@ -19,7 +19,6 @@ jobs:
     env:
       NODE_ENV: "production"
 
-
     steps:
       - name: Checkout 🛎
         uses: actions/checkout@master
