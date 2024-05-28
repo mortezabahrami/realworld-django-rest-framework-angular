@@ -51,14 +51,14 @@ jobs:
 
       - name: Run Tests
         working-directory: ./frontend
-        run: npm ci --force && npm run test
+        run: export NODE_ENV=test && npm ci --force && npm run test
 
       - name: Clear Test Cache
         run: npm cache clear --force
 
       - name: Building application
         working-directory: ./frontend
-        run: npm run build --force
+        run: export NODE_ENV=production && npm run build
 
       - name: Generate deployment package
         run: zip -r deploy.zip * .[^.]* -x "**node_modules**"
